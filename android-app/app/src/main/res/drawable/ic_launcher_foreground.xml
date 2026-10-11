@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="utf-8"?>
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <!-- 卡片本體 -->
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M26,33 h56 a7,7 0 0 1 7,7 v28 a7,7 0 0 1 -7,7 h-56 a7,7 0 0 1 -7,-7 v-28 a7,7 0 0 1 7,-7 z" />
+    <!-- 條碼線條 -->
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M30,44 h3 v18 h-3 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M36,44 h2 v18 h-2 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M41,44 h4 v18 h-4 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M48,44 h2 v18 h-2 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M53,44 h3 v18 h-3 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M59,44 h2 v18 h-2 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M64,44 h4 v18 h-4 z" />
+    <path
+        android:fillColor="#FF7A4A2B"
+        android:pathData="M71,44 h2 v18 h-2 z" />
+    <path
+        android:fillColor="#FFD9A87C"
+        android:pathData="M30,68 h48 v4 h-48 z" />
+</vector>

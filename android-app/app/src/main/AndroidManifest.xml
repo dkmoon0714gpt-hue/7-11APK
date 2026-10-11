@@ -1,0 +1,50 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <!--
+      刻意只宣告 CAMERA。
+      本 APP 不宣告 INTERNET，因此作業系統層面就無法連網，
+      卡片照片、條碼、卡號、有效期限都不會離開手機。
+    -->
+    <uses-permission android:name="android.permission.CAMERA" />
+
+    <!--
+      ML Kit 的遞移依賴（com.google.android.datatransport）會在合併清單時自動加入
+      網路權限；這裡明確移除，確保最終 APK 完全沒有網路權限。
+      （已用 aapt2 dump badging 驗證安裝後的實際權限只有 CAMERA）
+    -->
+    <uses-permission
+        android:name="android.permission.INTERNET"
+        tools:node="remove" />
+    <uses-permission
+        android:name="android.permission.ACCESS_NETWORK_STATE"
+        tools:node="remove" />
+
+    <uses-feature
+        android:name="android.hardware.camera.any"
+        android:required="false" />
+
+    <application
+        android:name=".GiftCardApp"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="false"
+        android:theme="@style/Theme.Chaoshangka">
+
+        <activity
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/app_name"
+            android:theme="@style/Theme.Chaoshangka"
+            android:windowSoftInputMode="adjustResize">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+
+</manifest>
