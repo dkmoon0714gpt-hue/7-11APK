@@ -1,15 +1,17 @@
 package com.chaoshangka.manager.ui.screens
 
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.text.KeyboardActions
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
+import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -20,6 +22,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -32,7 +35,7 @@ import com.chaoshangka.manager.ui.components.StoreFilterRow
 import com.chaoshangka.manager.ui.viewmodel.AppViewModelFactory
 import com.chaoshangka.manager.ui.viewmodel.CardListViewModel
 
-/** 全部卡片：搜尋（商品名／面額／條碼／卡號／備註）+ 超商篩選 + 未使用／已使用切換。 */
+/** 全部卡片：搜尋（商品名／面額／條碼／卡號／備註）+ 超商篩選 + 全部／未使用／已使用切換。 */
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun CardListScreen(
@@ -68,7 +71,15 @@ fun CardListScreen(
                 OutlinedTextField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = { Text("搜尋商品名稱、面額、條碼、卡號、備註") },
+                    label = { Text("搜尋商品名稱") },
+                    singleLine = true,
+                    trailingIcon = {
+                        IconButton(onClick = { /* 搜尋已即時套用 */ }) {
+                            Icon(imageVector = Icons.Default.Search, contentDescription = "搜尋")
+                        }
+                    },
+                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
+                    keyboardActions = KeyboardActions(onSearch = { /* 搜尋已即時套用 */ }),
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
@@ -77,6 +88,11 @@ fun CardListScreen(
             }
             item {
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
+                    FilterChip(
+                        selected = state.statusFilter == null,
+                        onClick = { viewModel.setStatusFilter(null) },
+                        label = { Text("全部") },
+                    )
                     FilterChip(
                         selected = state.statusFilter == CardStatus.UNUSED,
                         onClick = { viewModel.setStatusFilter(CardStatus.UNUSED) },

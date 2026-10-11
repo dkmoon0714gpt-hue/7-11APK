@@ -27,7 +27,7 @@ data class CardListUiState(
     val loading: Boolean = true,
     val query: String = "",
     val storeFilter: StoreType? = null,
-    val statusFilter: CardStatus = CardStatus.UNUSED,
+    val statusFilter: CardStatus? = null,
     val cards: List<GiftCard> = emptyList(),
     val today: LocalDate = LocalDate.now(),
     val warningDays: Int = 7,
@@ -38,7 +38,7 @@ class CardListViewModel(private val container: AppContainer) : ViewModel() {
 
     private val query = MutableStateFlow("")
     private val storeFilter = MutableStateFlow<StoreType?>(null)
-    private val statusFilter = MutableStateFlow(CardStatus.UNUSED)
+    private val statusFilter = MutableStateFlow<CardStatus?>(null)
 
     val uiState: StateFlow<CardListUiState> = combine(
         container.cardRepository.observeAllCards(),
@@ -49,7 +49,9 @@ class CardListViewModel(private val container: AppContainer) : ViewModel() {
     ) { cards, queryText, store, status, warningDays ->
         val today = LocalDate.now(container.clock)
         val filtered = CardSearch.filter(cards, queryText, store, status)
-        val ordered = if (status == CardStatus.UNUSED) {
+        val ordered = if (status == null) {
+            SortCardsUseCase.unusedOrdered(filtered, today, warningDays)
+        } else if (status == CardStatus.UNUSED) {
             SortCardsUseCase.unusedOrdered(filtered, today, warningDays)
         } else {
             SortCardsUseCase.usedNewestFirst(filtered)
@@ -77,7 +79,7 @@ class CardListViewModel(private val container: AppContainer) : ViewModel() {
         storeFilter.value = value
     }
 
-    fun setStatusFilter(value: CardStatus) {
+    fun setStatusFilter(value: CardStatus?) {
         statusFilter.value = value
     }
 }

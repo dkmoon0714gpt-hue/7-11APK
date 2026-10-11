@@ -66,9 +66,6 @@ fun HomeScreen(
                 .fillMaxWidth()
                 .padding(padding),
         ) {
-            item {
-                SearchLauncher(onClick = onOpenSearch, onOpenUsed = onOpenUsed)
-            }
             item { SectionTitle("統計") }
             item { StatsOverview(summary = state.summary) }
             item { SectionTitle("四大超商") }
@@ -81,27 +78,16 @@ fun HomeScreen(
                 }
             }
             item {
+                OutlinedButton(onClick = onOpenUsed, modifier = Modifier.fillMaxWidth()) {
+                    Text("查看已使用紀錄")
+                }
+            }
+            item {
                 DisclaimerBanner(
                     text = "本 APP 完全離線運作（無網路權限）：卡片資料、照片與辨識都在手機本機處理。" +
                         "「使用」只代表你確認已使用，APP 不會連線超商系統驗證兌換結果或卡片真偽。",
                 )
             }
-        }
-    }
-}
-
-@Composable
-private fun SearchLauncher(onClick: () -> Unit, onOpenUsed: () -> Unit) {
-    androidx.compose.foundation.layout.Column(
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-        modifier = Modifier.fillMaxWidth(),
-    ) {
-        OutlinedButton(onClick = onClick, modifier = Modifier.fillMaxWidth()) {
-            Icon(imageVector = Icons.Default.Search, contentDescription = null)
-            Text(text = "搜尋商品名稱、條碼、卡號、備註")
-        }
-        OutlinedButton(onClick = onOpenUsed, modifier = Modifier.fillMaxWidth()) {
-            Text("查看已使用紀錄")
         }
     }
 }
