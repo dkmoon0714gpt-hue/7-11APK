@@ -42,16 +42,24 @@ class CardListViewModel(private val container: AppContainer) : ViewModel() {
 
     val uiState: StateFlow<CardListUiState> = combine(
         container.cardRepository.observeAllCards(),
+        container.settingsRepository.warningDays,
+    ) { cards, warningDays ->
+        Pair(cards, warningDays)
+    }.combine(
         query,
+    ) { (cards, warningDays), queryText ->
+        Triple(cards, warningDays, queryText)
+    }.combine(
         storeFilter,
         statusFilter,
-        container.settingsRepository.warningDays,
-    ) { cards, queryText, store, status, warningDays ->
+    ) { (cards, warningDays, queryText), store, status ->
         val today = LocalDate.now(container.clock)
-        val filtered = CardSearch.filter(cards, queryText, store, status)
-        val ordered = if (status == null) {
-            SortCardsUseCase.unusedOrdered(filtered, today, warningDays)
-        } else if (status == CardStatus.UNUSED) {
+        val filtered = cards
+            .filter { !it.isArchived }
+            .filter { store == null || it.storeType == store }
+            .filter { status == null || it.cardStatus == status }
+            .filter { CardSearch.matches(it, queryText) }
+        val ordered = if (status == null || status == CardStatus.UNUSED) {
             SortCardsUseCase.unusedOrdered(filtered, today, warningDays)
         } else {
             SortCardsUseCase.usedNewestFirst(filtered)
