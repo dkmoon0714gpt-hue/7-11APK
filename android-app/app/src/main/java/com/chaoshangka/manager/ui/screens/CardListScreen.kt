@@ -7,11 +7,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
-import androidx.compose.foundation.text.KeyboardActions
-import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.CameraAlt
-import androidx.compose.material.icons.filled.Search
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
@@ -22,7 +19,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.input.ImeAction
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -71,15 +67,7 @@ fun CardListScreen(
                 OutlinedTextField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = { Text("搜尋商品名稱") },
-                    singleLine = true,
-                    trailingIcon = {
-                        IconButton(onClick = { /* 搜尋已即時套用 */ }) {
-                            Icon(imageVector = Icons.Default.Search, contentDescription = "搜尋")
-                        }
-                    },
-                    keyboardOptions = KeyboardOptions(imeAction = ImeAction.Search),
-                    keyboardActions = KeyboardActions(onSearch = { /* 搜尋已即時套用 */ }),
+                    label = { Text("搜尋商品名稱、面額、條碼、卡號、備註") },
                     modifier = Modifier.fillMaxWidth(),
                 )
             }
