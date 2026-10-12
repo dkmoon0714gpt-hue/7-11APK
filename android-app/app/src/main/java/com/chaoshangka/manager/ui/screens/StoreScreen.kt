@@ -12,7 +12,6 @@ import androidx.compose.material.icons.filled.CameraAlt
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -33,6 +32,7 @@ import com.chaoshangka.manager.ui.components.EmptyState
 import com.chaoshangka.manager.ui.components.FilterChipsRow
 import com.chaoshangka.manager.ui.components.InfoBadge
 import com.chaoshangka.manager.ui.components.ProductGroupCard
+import com.chaoshangka.manager.ui.components.SearchField
 import com.chaoshangka.manager.ui.components.SectionTitle
 import com.chaoshangka.manager.ui.viewmodel.AppViewModelFactory
 import com.chaoshangka.manager.ui.viewmodel.StoreViewModel
@@ -84,11 +84,10 @@ fun StoreScreen(
                 }
             }
             item {
-                OutlinedTextField(
+                SearchField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = { Text("搜尋此超商的卡片") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = "搜尋此超商的卡片",
                 )
             }
             item {

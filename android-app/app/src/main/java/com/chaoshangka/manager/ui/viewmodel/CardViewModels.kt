@@ -49,10 +49,10 @@ class CardListViewModel(private val container: AppContainer) : ViewModel() {
         query,
     ) { (cards, warningDays), queryText ->
         Triple(cards, warningDays, queryText)
-    }.combine(
-        storeFilter,
-        statusFilter,
-    ) { (cards, warningDays, queryText), store, status ->
+    }.combine(storeFilter) { cardData, store ->
+        cardData to store
+    }.combine(statusFilter) { (cardData, store), status ->
+        val (cards, warningDays, queryText) = cardData
         val today = LocalDate.now(container.clock)
         val filtered = cards
             .filter { !it.isArchived }

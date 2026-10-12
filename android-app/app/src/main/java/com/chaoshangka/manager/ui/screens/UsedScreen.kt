@@ -21,6 +21,7 @@ import com.chaoshangka.manager.di.AppContainer
 import com.chaoshangka.manager.ui.components.AppTopBar
 import com.chaoshangka.manager.ui.components.EmptyState
 import com.chaoshangka.manager.ui.components.GiftCardRow
+import com.chaoshangka.manager.ui.components.SearchField
 import com.chaoshangka.manager.ui.components.StoreFilterRow
 import com.chaoshangka.manager.util.DateParser
 import com.chaoshangka.manager.ui.viewmodel.AppViewModelFactory
@@ -51,11 +52,10 @@ fun UsedScreen(
                 .padding(padding),
         ) {
             item {
-                OutlinedTextField(
+                SearchField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = { Text("搜尋已使用的卡片") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = "搜尋已使用的卡片",
                 )
             }
             item {

@@ -13,7 +13,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.FilterChip
 import androidx.compose.material3.Icon
 import androidx.compose.material3.IconButton
-import androidx.compose.material3.OutlinedTextField
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -27,6 +26,7 @@ import com.chaoshangka.manager.domain.model.CardStatus
 import com.chaoshangka.manager.ui.components.AppTopBar
 import com.chaoshangka.manager.ui.components.EmptyState
 import com.chaoshangka.manager.ui.components.GiftCardRow
+import com.chaoshangka.manager.ui.components.SearchField
 import com.chaoshangka.manager.ui.components.StoreFilterRow
 import com.chaoshangka.manager.ui.viewmodel.AppViewModelFactory
 import com.chaoshangka.manager.ui.viewmodel.CardListViewModel
@@ -64,11 +64,10 @@ fun CardListScreen(
                 .padding(padding),
         ) {
             item {
-                OutlinedTextField(
+                SearchField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = { Text("搜尋商品名稱、面額、條碼、卡號、備註") },
-                    modifier = Modifier.fillMaxWidth(),
+                    label = "搜尋商品名稱、面額、條碼、卡號、備註",
                 )
             }
             item {
