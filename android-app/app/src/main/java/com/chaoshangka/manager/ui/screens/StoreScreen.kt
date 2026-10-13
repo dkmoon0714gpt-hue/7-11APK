@@ -87,7 +87,7 @@ fun StoreScreen(
                 SearchField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = "搜尋此超商的卡片",
+                    label = "搜尋商品名稱、商品分類、面額",
                 )
             }
             item {

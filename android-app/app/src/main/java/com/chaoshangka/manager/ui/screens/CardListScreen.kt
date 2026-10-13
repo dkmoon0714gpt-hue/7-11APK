@@ -67,7 +67,7 @@ fun CardListScreen(
                 SearchField(
                     value = state.query,
                     onValueChange = viewModel::setQuery,
-                    label = "搜尋商品名稱、面額、條碼、卡號、備註",
+                    label = "搜尋商品名稱、商品分類、面額",
                 )
             }
             item {

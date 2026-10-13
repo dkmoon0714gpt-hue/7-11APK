@@ -9,6 +9,7 @@ import com.chaoshangka.manager.domain.model.ExpiryStatus
 import com.chaoshangka.manager.domain.model.GiftCard
 import com.chaoshangka.manager.domain.model.StoreType
 import com.chaoshangka.manager.domain.usecase.SortCardsUseCase
+import com.chaoshangka.manager.domain.model.ProductCategory
 import com.chaoshangka.manager.util.CardSearch
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
@@ -40,25 +41,34 @@ class CardListViewModel(private val container: AppContainer) : ViewModel() {
     private val storeFilter = MutableStateFlow<StoreType?>(null)
     private val statusFilter = MutableStateFlow<CardStatus?>(null)
 
-    val uiState: StateFlow<CardListUiState> = combine(
+    private data class Source(
+        val cards: List<GiftCard>,
+        val warningDays: Int,
+        val categories: List<ProductCategory>,
+    )
+
+    private val source = combine(
         container.cardRepository.observeAllCards(),
         container.settingsRepository.warningDays,
-    ) { cards, warningDays ->
-        Pair(cards, warningDays)
-    }.combine(
+        container.categoryRepository.observeActive(),
+    ) { cards, warningDays, categories -> Source(cards, warningDays, categories) }
+
+    val uiState: StateFlow<CardListUiState> = combine(
+        source,
         query,
-    ) { (cards, warningDays), queryText ->
-        Triple(cards, warningDays, queryText)
-    }.combine(storeFilter) { cardData, store ->
-        cardData to store
-    }.combine(statusFilter) { (cardData, store), status ->
-        val (cards, warningDays, queryText) = cardData
+    ) { src, queryText ->
+        Triple(src.cards, src.warningDays, src.categories)
+    }.combine(storeFilter) { triple, store ->
+        triple to store
+    }.combine(statusFilter) { (triple, store), status ->
+        val (cards, warningDays, categories) = triple
         val today = LocalDate.now(container.clock)
+        val categoryNames = categories.associate { it.id to it.categoryName }
         val filtered = cards
             .filter { !it.isArchived }
             .filter { store == null || it.storeType == store }
             .filter { status == null || it.cardStatus == status }
-            .filter { CardSearch.matches(it, queryText) }
+            .filter { CardSearch.matches(it, queryText, it.categoryId?.let { id -> categoryNames[id] }) }
         val ordered = if (status == null || status == CardStatus.UNUSED) {
             SortCardsUseCase.unusedOrdered(filtered, today, warningDays)
         } else {

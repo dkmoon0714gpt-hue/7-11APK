@@ -64,7 +64,8 @@ class StoreViewModel(private val container: AppContainer) : ViewModel() {
             },
         )
 
-        val visibleCards = storeCards.filter { CardSearch.matches(it, queryText) }
+        val categoryNames = data.categories.associate { it.id to it.categoryName }
+        val visibleCards = storeCards.filter { CardSearch.matches(it, queryText, it.categoryId?.let { id -> categoryNames[id] }) }
         val presets = data.categories.filter { it.isPresetProduct && it.storeType == storeType }
         val groups = com.chaoshangka.manager.domain.usecase.ProductGroupBuilder.build(
             storeCards = visibleCards,

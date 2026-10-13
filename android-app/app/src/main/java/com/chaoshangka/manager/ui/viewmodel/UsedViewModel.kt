@@ -7,6 +7,7 @@ import com.chaoshangka.manager.domain.model.CardStatus
 import com.chaoshangka.manager.domain.model.GiftCard
 import com.chaoshangka.manager.domain.model.StoreType
 import com.chaoshangka.manager.domain.usecase.SortCardsUseCase
+import com.chaoshangka.manager.domain.model.ProductCategory
 import com.chaoshangka.manager.util.CardSearch
 import com.chaoshangka.manager.util.DateFormatters
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -35,15 +36,17 @@ class UsedViewModel(private val container: AppContainer) : ViewModel() {
 
     val uiState: StateFlow<UsedUiState> = combine(
         container.cardRepository.observeAllCards(),
+        container.categoryRepository.observeActive(),
         query,
         storeFilter,
         dateFilter,
-    ) { cards, queryText, store, date ->
+    ) { cards, categories, queryText, store, date ->
+        val categoryNames = categories.associate { it.id to it.categoryName }
         val used = cards.filter { it.cardStatus == CardStatus.USED && !it.isArchived }
         val filtered = used
             .filter { store == null || it.storeType == store }
             .filter { date == null || DateFormatters.epochMillisToLocalDate(it.usedAt) == date }
-            .filter { CardSearch.matches(it, queryText) }
+            .filter { CardSearch.matches(it, queryText, it.categoryId?.let { id -> categoryNames[id] }) }
         UsedUiState(
             loading = false,
             cards = SortCardsUseCase.usedNewestFirst(filtered),

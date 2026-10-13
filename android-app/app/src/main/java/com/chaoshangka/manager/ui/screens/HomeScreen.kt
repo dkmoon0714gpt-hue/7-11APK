@@ -24,7 +24,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import com.chaoshangka.manager.di.AppContainer
 import com.chaoshangka.manager.domain.model.StoreType
 import com.chaoshangka.manager.ui.components.AppTopBar
-import com.chaoshangka.manager.ui.components.DisclaimerBanner
 import com.chaoshangka.manager.ui.components.SectionTitle
 import com.chaoshangka.manager.ui.components.StatsOverview
 import com.chaoshangka.manager.ui.components.StoreSummaryCard
@@ -82,12 +81,7 @@ fun HomeScreen(
                     Text("查看已使用紀錄")
                 }
             }
-            item {
-                DisclaimerBanner(
-                    text = "本 APP 卡片資料、照片與辨識都在手機本機處理。" +
-                        "「使用」只代表你確認已使用，APP 不會連線超商系統驗證兌換結果或卡片真偽。",
-                )
-            }
+
         }
     }
 }
